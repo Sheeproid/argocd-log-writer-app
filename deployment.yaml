@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-writer
+  namespace: log-writer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: log-writer
+  template:
+    metadata:
+      labels:
+        app: log-writer
+    spec:
+      containers:
+      - name: writer
+        image: busybox
+        command: ["sh", "-c"]
+        args:
+          - |
+            while true; do
+              echo "$(hostname): log entry at $(date)";
+              sleep $((5 + RANDOM % 15));
+            done
